@@ -18,12 +18,42 @@ function preload() {
   this.load.image("fronthair", "images/clothes/fronthair.png");
   this.load.image("backhair", "images/clothes/backhair.png");
   this.load.image("message", "images/message.png");
+  this.load.image("girlbody", "images/girlbody.png");
+  this.load.image("girlsurprized", "images/emotions/surprized.png");
+  this.load.image("neutralgirl", "images/emotions/girlneutral.png");
+  this.load.image("pyjama", "images/clothes/pyjama.png");
+  this.load.image("hair", "images/clothes/hairgirl.png");
+  this.load.image("girlmessage", "images/lexy1.png");
 }
 
 function create() {
   bedroom = this.add.image(150, 300, "bedroom");
   overlay = this.add.renderTexture(0, 0, 360, 600);
   overlay.fill(0x000000, 0.75);
+  girl = this.add.image(-200, 320, "girlbody");
+  girl.setScale(0.32);
+  pyjama = this.add.image(-200, 320, "pyjama");
+  pyjama.setScale(0.32);
+
+  this.anims.create({
+    key: "girlspeak",
+    frames: [{ key: "neutralgirl" }, { key: "girlsurprized" }],
+    frameRate: 3,
+    repeat: 4,
+  });
+
+  const girlspeak2 = this.add.sprite(-200, 320, "girlsurprized").setScale(0.32);
+
+  function girlAnimation() {
+    girlspeak2.play("girlspeak");
+  }
+
+  girlhair = this.add.image(-200, 320, "hair");
+  girlhair.setScale(0.32);
+
+  const popupgirl = this.add.image(-200, 320, "girlmessage");
+  popupgirl.setScale(0.1);
+
   boy = this.add.image(180, 320, "introboy");
   boy.setScale(0.5);
 
@@ -39,24 +69,35 @@ function create() {
   fronthair = this.add.image(180, 320, "fronthair");
   fronthair.setScale(0.5);
 
-  popup = this.add.image(180, 350, "message");
-  popup.setScale(0.1);
+  const popupman = this.add.image(180, 350, "message");
+  popupman.setScale(0.1);
 
-  const popupMessage = () => {
+  const popupMessage = (popup) => {
     tween = this.tweens.add({
       targets: popup,
       scaleX: 0.25,
       scaleY: 0.25,
-      ease: "Linear", // 'Cubic', 'Elastic', 'Bounce', 'Back'
+      ease: "Linear",
       duration: 200,
-      repeat: 0, // -1: infinity
+      repeat: 0,
       yoyo: false,
     });
   };
 
-  const move = () => {
+  const girlMove = () => {
+    moveGirl = this.tweens.add({
+      targets: [girl, pyjama, girlspeak2, girlhair, popupgirl],
+      x: 180,
+      ease: "Linear",
+      duration: 500,
+      repeat: 0,
+      yoyo: false,
+    });
+  };
+
+  const boyAnimation = () => {
     boymove = this.tweens.add({
-      targets: [boy, backhair, fronthair, speak, popup],
+      targets: [boy, backhair, fronthair, speak, popupman],
       x: 900,
       ease: "Linear",
       duration: 500,
@@ -65,15 +106,31 @@ function create() {
     });
   };
 
+  const move = () => {
+    boyAnimation();
+    girlMove();
+  };
+
   let timer = this.time.addEvent({
     delay: 1500,
     callback: move,
     callbackScope: this,
   });
 
+  let girlTimer = this.time.addEvent({
+    delay: 2000,
+    callback: () => {
+      girlAnimation();
+      popupMessage(popupgirl);
+    },
+    callbackScope: this,
+  });
+
   let timerMessage = this.time.addEvent({
     delay: 300,
-    callback: popupMessage,
+    callback: () => {
+      popupMessage(popupman);
+    },
     callbackScope: this,
   });
 }
