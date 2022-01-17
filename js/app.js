@@ -30,6 +30,8 @@ function create() {
   bedroom = this.add.image(150, 300, "bedroom");
   overlay = this.add.renderTexture(0, 0, 360, 600);
   overlay.fill(0x000000, 0.75);
+  let girlContainer = this.add.container(0, 0);
+  let boyContainer = this.add.container(0, 0);
   girl = this.add.image(-200, 320, "girlbody");
   girl.setScale(0.32);
   pyjama = this.add.image(-200, 320, "pyjama");
@@ -72,6 +74,9 @@ function create() {
   const popupman = this.add.image(180, 350, "message");
   popupman.setScale(0.1);
 
+  girlContainer.add([girl, pyjama, girlspeak2, girlhair, popupgirl]);
+  boyContainer.add([boy, backhair, speak, fronthair, popupman]);
+
   const popupMessage = (popup) => {
     tween = this.tweens.add({
       targets: popup,
@@ -86,8 +91,8 @@ function create() {
 
   const girlMove = () => {
     moveGirl = this.tweens.add({
-      targets: [girl, pyjama, girlspeak2, girlhair, popupgirl],
-      x: 180,
+      targets: girlContainer,
+      x: 380,
       ease: "Linear",
       duration: 500,
       repeat: 0,
@@ -97,7 +102,7 @@ function create() {
 
   const boyAnimation = () => {
     boymove = this.tweens.add({
-      targets: [boy, backhair, fronthair, speak, popupman],
+      targets: boyContainer,
       x: 900,
       ease: "Linear",
       duration: 500,
