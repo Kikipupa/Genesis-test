@@ -21,20 +21,48 @@ export class FirstScene extends Phaser.Scene {
     this.load.image("girlmessage", "images/lexy1.png");
     this.load.image("rectangle", "images/Rectangle.png");
     this.load.image("whitebutton", "images/whitebutton.png");
+    this.load.image("reddress", "images/clothes/reddress.png");
+    this.load.image("smallsuit", "images/clothes/smallsuit.png");
+    this.load.image("bigsuit", "images/clothes/bigsuit.png");
+    this.load.image("progressbar", "images/progressbar.png");
+    this.load.image("orangeline", "images/orangeline.png");
+    this.load.image("joygirl", "images/emotions/joy.png");
   }
 
   create() {
     const bedroom = this.add.image(150, 300, "bedroom");
     const overlay = this.add.renderTexture(0, 0, 360, 600);
     overlay.fill(0x000000, 0.75);
-    const girlContainer = this.add.container(0, 0);
-    const boyContainer = this.add.container(0, 0);
+    overlay.setVisible(true);
+    const smallSuit = this.add
+      .image(170, 0, "smallsuit")
+      .setScale(0.6)
+      .setVisible(false);
+    const smallDress = this.add
+      .image(0, -30, "reddress")
+      .setScale(0.08)
+      .setVisible(false);
+    const progressbar = this.add.image(0, 0, "progressbar");
+    const orangeLine = this.add.image(0, 0, "orangeline").setOrigin(2, 0.5);
+    const girlContainer = this.add.container(-200, 360).setScale(0.32);
+    const boyContainer = this.add.container(180, 320).setScale(0.5);
     const rectangleContainer = this.add.container(180, -200);
     const whiteButtonContainer = this.add.container(95, 1000);
-    const girl = this.add.image(-200, 320, "girlbody");
-    girl.setScale(0.32);
-    const pyjama = this.add.image(-200, 320, "pyjama");
-    pyjama.setScale(0.32);
+    const clothButtonContainer = this.add.container(0, 0);
+    const clothButtonContainer2 = this.add.container(0, 0);
+    const progressBarContainer = this.add.container(180, -200);
+    progressBarContainer.add([progressbar, orangeLine]).setScale(0.6);
+    const girl = this.add.image(0, 0, "girlbody");
+    const pyjama = this.add.image(0, 0, "pyjama");
+    const redDress = this.add.sprite(0, 0, "reddress").setVisible(false);
+    let costume = this.add.sprite(0, 0, "bigsuit").setVisible(false);
+
+    this.anims.create({
+      key: "girlemotion",
+      frames: [{ key: "girlsurprized" }, { key: "joygirl" }],
+      frameRate: 25,
+      repeat: 0,
+    });
 
     this.anims.create({
       key: "girlspeak",
@@ -43,22 +71,21 @@ export class FirstScene extends Phaser.Scene {
       repeat: 2,
     });
 
-    const girlspeak2 = this.add
-      .sprite(-200, 320, "girlsurprized")
-      .setScale(0.32);
+    const girlspeak2 = this.add.sprite(0, 0, "girlsurprized");
 
     function girlAnimation() {
       girlspeak2.play("girlspeak");
     }
 
-    const girlhair = this.add.image(-200, 320, "hair");
-    girlhair.setScale(0.32);
+    function girlEmotionJoy() {
+      girlspeak2.play("girlemotion");
+    }
 
-    const popupgirl = this.add.image(-200, 320, "girlmessage");
-    popupgirl.setScale(0.1);
+    const girlhair = this.add.image(0, 0, "hair");
 
-    const boy = this.add.image(180, 320, "introboy");
-    boy.setScale(0.5);
+    const popupgirl = this.add.image(0, 0, "girlmessage");
+    popupgirl.setScale(0);
+    const boy = this.add.image(0, 0, "introboy");
 
     this.anims.create({
       key: "speak",
@@ -66,26 +93,21 @@ export class FirstScene extends Phaser.Scene {
       frameRate: 3,
       repeat: 4,
     });
-    const backhair = this.add.image(180, 320, "backhair");
-    backhair.setScale(0.5);
-    const speak = this.add
-      .sprite(180, 320, "neutralface")
-      .setScale(0.5)
-      .play("speak");
-    const fronthair = this.add.image(180, 320, "fronthair");
-    fronthair.setScale(0.5);
+    const backhair = this.add.image(0, 0, "backhair");
 
-    const popupman = this.add.image(180, 350, "message");
-    popupman.setScale(0.1);
+    const speak = this.add.sprite(0, 0, "neutralface").play("speak");
+    const fronthair = this.add.image(0, 0, "fronthair");
+    const popupman = this.add.image(0, 0, "message");
+    popupman.setScale(0);
 
     girlContainer.add([girl, pyjama, girlspeak2, girlhair, popupgirl]);
     boyContainer.add([boy, backhair, speak, fronthair, popupman]);
 
-    const showMessage = (popup) => {
+    const showMessage = (popup, scale) => {
       const tween = this.tweens.add({
         targets: popup,
-        scaleX: 0.25,
-        scaleY: 0.25,
+        scaleX: scale,
+        scaleY: scale,
         ease: "Linear",
         duration: 200,
         repeat: 0,
@@ -108,7 +130,7 @@ export class FirstScene extends Phaser.Scene {
     const girlMove = () => {
       const moveGirl = this.tweens.add({
         targets: girlContainer,
-        x: 380,
+        x: 200,
         ease: "Linear",
         duration: 500,
         repeat: 0,
@@ -142,7 +164,7 @@ export class FirstScene extends Phaser.Scene {
       delay: 2000,
       callback: () => {
         girlAnimation();
-        showMessage(popupgirl);
+        showMessage(popupgirl, 0.7);
       },
       callbackScope: this,
     });
@@ -150,7 +172,7 @@ export class FirstScene extends Phaser.Scene {
     let timerMessage = this.time.addEvent({
       delay: 300,
       callback: () => {
-        showMessage(popupman);
+        showMessage(popupman, 0.5);
       },
       callbackScope: this,
     });
@@ -158,10 +180,9 @@ export class FirstScene extends Phaser.Scene {
     const girlScale = () => {
       this.tweens.add({
         targets: girlContainer,
-        scaleX: 1.1,
-        scaleY: 1.1,
-        x: 410,
-        y: 20,
+        scaleX: 0.34,
+        scaleY: 0.34,
+        y: 370,
         ease: "Linear",
         duration: 400,
         repeat: 0,
@@ -178,28 +199,60 @@ export class FirstScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
+    const rectangleAnim = (y, target) => {
+      this.tweens.add({
+        targets: target,
+        y: y,
+        ease: "Linear",
+        duration: 400,
+        repeat: 0,
+        yoyo: false,
+      });
+    };
+
     rectangleContainer.add([rectangle, rectangleText]);
 
-    let buttonOne = this.add.image(0, 0, "whitebutton").setScale(0.6);
-    let buttonTwo = this.add.image(170, 0, "whitebutton").setScale(0.6);
+    const buttonOne = this.add.image(0, 0, "whitebutton").setScale(0.6);
+    const buttonTwo = this.add.image(170, 0, "whitebutton").setScale(0.6);
 
-    whiteButtonContainer.add([buttonOne, buttonTwo]);
-
-    const rectangleAnim = () => {
-      this.tweens.add({
-        targets: rectangleContainer,
-        y: 30,
-        ease: "Linear",
-        duration: 400,
-        repeat: 0,
-        yoyo: false,
+    clothButtonContainer.add([buttonOne, smallDress]);
+    clothButtonContainer2.add([buttonTwo, smallSuit]);
+    buttonOne
+      .setSize(100, 100)
+      .setInteractive()
+      .on("pointerdown", () => {
+        pyjama.setVisible(false);
+        redDress.setVisible(true);
+        girlContainer.add(redDress);
+        girlContainer.bringToTop(girlhair);
+        costume.setVisible(false);
+        overlay.setVisible(false);
+        rectangleAnim(-30, rectangleContainer);
+        rectangleAnim(30, progressBarContainer);
+        girlEmotionJoy();
+        buttonsToggle(false);
       });
-    };
+    buttonTwo
+      .setSize(100, 100)
+      .setInteractive()
+      .on("pointerdown", () => {
+        pyjama.setVisible(false);
+        costume.setVisible(true);
+        girlContainer.add(costume);
+        girlContainer.bringToTop(girlhair);
+        redDress.setVisible(false);
+        overlay.setVisible(false);
+        rectangleAnim(-30, rectangleContainer);
+        rectangleAnim(30, progressBarContainer);
+        girlEmotionJoy();
+        buttonsToggle(false);
+      });
+    whiteButtonContainer.add([clothButtonContainer, clothButtonContainer2]);
 
-    const buttonAnim = () => {
+    const buttonsToggle = (show) => {
       this.tweens.add({
         targets: whiteButtonContainer,
-        y: 500,
+        y: show ? 500 : 1000,
         ease: "Linear",
         duration: 400,
         repeat: 0,
@@ -207,13 +260,16 @@ export class FirstScene extends Phaser.Scene {
       });
     };
 
-    let timerScale = this.time.addEvent({
+    const timerScale = this.time.addEvent({
       delay: 3500,
+
       callback: () => {
         girlScale();
         hideMessage(popupgirl);
-        rectangleAnim();
-        buttonAnim();
+        smallDress.setVisible(true);
+        smallSuit.setVisible(true);
+        rectangleAnim(30, rectangleContainer);
+        buttonsToggle(true);
       },
       callbackScope: this,
     });
