@@ -19,6 +19,8 @@ export class FirstScene extends Phaser.Scene {
     this.load.image("pyjama", "images/clothes/pyjama.png");
     this.load.image("hair", "images/clothes/hairgirl.png");
     this.load.image("girlmessage", "images/lexy1.png");
+    this.load.image("rectangle", "images/Rectangle.png");
+    this.load.image("whitebutton", "images/whitebutton.png");
   }
 
   create() {
@@ -27,6 +29,8 @@ export class FirstScene extends Phaser.Scene {
     overlay.fill(0x000000, 0.75);
     const girlContainer = this.add.container(0, 0);
     const boyContainer = this.add.container(0, 0);
+    const rectangleContainer = this.add.container(180, -200);
+    const whiteButtonContainer = this.add.container(95, 1000);
     const girl = this.add.image(-200, 320, "girlbody");
     girl.setScale(0.32);
     const pyjama = this.add.image(-200, 320, "pyjama");
@@ -154,9 +158,48 @@ export class FirstScene extends Phaser.Scene {
     const girlScale = () => {
       this.tweens.add({
         targets: girlContainer,
-        scaleX: 1.15,
-        scaleY: 1.15,
+        scaleX: 1.1,
+        scaleY: 1.1,
         x: 410,
+        y: 20,
+        ease: "Linear",
+        duration: 400,
+        repeat: 0,
+        yoyo: false,
+      });
+    };
+
+    let rectangle = this.add.image(0, 0, "rectangle");
+    rectangle.setScale(0.3);
+    let rectangleText = this.add
+      .text(0, 0, "Choose your appearance", {
+        font: "18px arial",
+        boundsAlignH: "center",
+      })
+      .setOrigin(0.5);
+
+    rectangleContainer.add([rectangle, rectangleText]);
+
+    let buttonOne = this.add.image(0, 0, "whitebutton").setScale(0.6);
+    let buttonTwo = this.add.image(170, 0, "whitebutton").setScale(0.6);
+
+    whiteButtonContainer.add([buttonOne, buttonTwo]);
+
+    const rectangleAnim = () => {
+      this.tweens.add({
+        targets: rectangleContainer,
+        y: 30,
+        ease: "Linear",
+        duration: 400,
+        repeat: 0,
+        yoyo: false,
+      });
+    };
+
+    const buttonAnim = () => {
+      this.tweens.add({
+        targets: whiteButtonContainer,
+        y: 500,
         ease: "Linear",
         duration: 400,
         repeat: 0,
@@ -169,6 +212,8 @@ export class FirstScene extends Phaser.Scene {
       callback: () => {
         girlScale();
         hideMessage(popupgirl);
+        rectangleAnim();
+        buttonAnim();
       },
       callbackScope: this,
     });
