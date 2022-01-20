@@ -57,12 +57,14 @@ export class FirstScene extends Phaser.Scene {
     const girl = this.add.image(0, 0, "girlbody");
     const pyjama = this.add.image(0, 0, "pyjama");
     const redDress = this.add.sprite(0, 0, "reddress").setVisible(false);
-    const bigBag1 = this.add
+    const bigBag1 = this.add.sprite(0, 0, "bag1").setVisible(false);
+    const bigBag2 = this.add.sprite(0, 0, "bag2").setVisible(false);
+    const smallBag1 = this.add
       .sprite(0, 0, "bag1")
       .setOrigin(0.4)
       .setScale(0.15)
       .setVisible(false);
-    const bigBag2 = this.add
+    const smallBag2 = this.add
       .sprite(0, 0, "bag2")
       .setOrigin(-0.7, 0.4)
       .setScale(0.12)
@@ -243,19 +245,27 @@ export class FirstScene extends Phaser.Scene {
         rectangleAnim(30, progressBarContainer);
         girlEmotionJoy();
         buttonsToggle(false);
-        clothButtonContainer.add(bigBag1);
-        clothButtonContainer2.add(bigBag2);
+        clothButtonContainer.add(smallBag1);
+        clothButtonContainer2.add(smallBag2);
         smallDress.setVisible(false);
         smallSuit.setVisible(false);
         this.time.addEvent({
           delay: 500,
           callback: () => {
-            bigBag1.setVisible(true);
-            bigBag2.setVisible(true);
+            smallBag1.setVisible(true);
+            smallBag2.setVisible(true);
             buttonsToggle(true);
           },
           callbackScope: this,
         });
+      });
+    buttonOne
+      .setSize(100, 100)
+      .setInteractive()
+      .on("pointerdown", () => {
+        bigBag1.setVisible(true);
+        girlContainer.add(bigBag1);
+        girlContainer.bringToTop(girlhair);
       });
     buttonTwo
       .setSize(100, 100)
@@ -271,19 +281,27 @@ export class FirstScene extends Phaser.Scene {
         rectangleAnim(30, progressBarContainer);
         girlEmotionJoy();
         buttonsToggle(false);
-        clothButtonContainer.add(bigBag1);
-        clothButtonContainer2.add(bigBag2);
+        clothButtonContainer.add(smallBag1);
+        clothButtonContainer2.add(smallBag2);
         smallSuit.setVisible(false);
         smallDress.setVisible(false);
         this.time.addEvent({
           delay: 500,
           callback: () => {
-            bigBag1.setVisible(true);
-            bigBag2.setVisible(true);
+            smallBag1.setVisible(true);
+            smallBag2.setVisible(true);
             buttonsToggle(true);
           },
           callbackScope: this,
         });
+      });
+    buttonTwo
+      .setSize(100, 100)
+      .setInteractive()
+      .on("pointerdown", () => {
+        bigBag2.setVisible(true);
+        girlContainer.add(bigBag2);
+        girlContainer.bringToTop(girlhair);
       });
 
     whiteButtonContainer.add([clothButtonContainer, clothButtonContainer2]);
