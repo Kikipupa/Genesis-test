@@ -29,6 +29,10 @@ export class FirstScene extends Phaser.Scene {
     this.load.image("joygirl", "images/emotions/joy.png");
     this.load.image("bag1", "images/clothes/bagblue.png");
     this.load.image("bag2", "images/clothes/bagbrown.png");
+    this.load.image("sunglasses", "images/clothes/glasses.png");
+    this.load.image("choker", "images/clothes/choker.png");
+    this.load.image("makeup1", "images/clothes/makeup1.png");
+    this.load.image("makeup2", "images/clothes/makeup2.png");
   }
 
   create() {
@@ -69,14 +73,17 @@ export class FirstScene extends Phaser.Scene {
       .setOrigin(-0.7, 0.4)
       .setScale(0.12)
       .setVisible(false);
-    let costume = this.add.sprite(0, 0, "bigsuit").setVisible(false);
-
-    this.anims.create({
-      key: "girlemotion",
-      frames: [{ key: "girlsurprized" }, { key: "joygirl" }],
-      frameRate: 25,
-      repeat: 0,
-    });
+    const costume = this.add.sprite(0, 0, "bigsuit").setVisible(false);
+    const sunGlasses = this.add.sprite(0, 0, "sunglasses").setVisible(false);
+    const choker = this.add.sprite(0, 0, "choker").setVisible(false);
+    const sunGlassesSmall = this.add
+      .sprite(-10, 250, "sunglasses")
+      .setScale(0.4)
+      .setVisible(false);
+    const chokerSmall = this.add
+      .sprite(170, 190, "choker")
+      .setScale(0.4)
+      .setVisible(false);
 
     this.anims.create({
       key: "girlspeak",
@@ -86,6 +93,49 @@ export class FirstScene extends Phaser.Scene {
     });
 
     const girlspeak2 = this.add.sprite(0, 0, "girlsurprized");
+    const girlhair = this.add.image(0, 0, "hair");
+
+    const popupgirl = this.add.image(0, 0, "girlmessage");
+    popupgirl.setScale(0);
+    const makeup1Small = this.add
+      .sprite(-15, 210, "makeup1")
+      .setScale(0.35)
+      .setVisible(false);
+    const makeup2Small = this.add
+      .sprite(155, 210, "makeup2")
+      .setScale(0.35)
+      .setVisible(false);
+    const makeup1 = this.add.sprite(0, 0, "makeup1").setVisible(false);
+    const makeup2 = this.add.sprite(0, 0, "makeup2").setVisible(false);
+
+    girlContainer.add([
+      girl,
+      pyjama,
+      girlspeak2,
+      redDress,
+      costume,
+      bigBag1,
+      bigBag2,
+      sunGlasses,
+      choker,
+      makeup1,
+      makeup2,
+      girlhair,
+      popupgirl,
+    ]);
+
+    let clickCount = 0;
+
+    function clickButton() {
+      clickCount++;
+    }
+
+    this.anims.create({
+      key: "girlemotion",
+      frames: [{ key: "girlsurprized" }, { key: "joygirl" }],
+      frameRate: 25,
+      repeat: 0,
+    });
 
     function girlAnimation() {
       girlspeak2.play("girlspeak");
@@ -95,10 +145,6 @@ export class FirstScene extends Phaser.Scene {
       girlspeak2.play("girlemotion");
     }
 
-    const girlhair = this.add.image(0, 0, "hair");
-
-    const popupgirl = this.add.image(0, 0, "girlmessage");
-    popupgirl.setScale(0);
     const boy = this.add.image(0, 0, "introboy");
 
     this.anims.create({
@@ -114,7 +160,6 @@ export class FirstScene extends Phaser.Scene {
     const popupman = this.add.image(0, 0, "message");
     popupman.setScale(0);
 
-    girlContainer.add([girl, pyjama, girlspeak2, girlhair, popupgirl]);
     boyContainer.add([boy, backhair, speak, fronthair, popupman]);
 
     const showMessage = (popup, scale) => {
@@ -235,74 +280,140 @@ export class FirstScene extends Phaser.Scene {
       .setSize(100, 100)
       .setInteractive()
       .on("pointerdown", () => {
-        pyjama.setVisible(false);
-        redDress.setVisible(true);
-        girlContainer.add(redDress);
-        girlContainer.bringToTop(girlhair);
-        costume.setVisible(false);
-        overlay.setVisible(false);
-        rectangleAnim(-30, rectangleContainer);
-        rectangleAnim(30, progressBarContainer);
-        girlEmotionJoy();
-        buttonsToggle(false);
-        clothButtonContainer.add(smallBag1);
-        clothButtonContainer2.add(smallBag2);
-        smallDress.setVisible(false);
-        smallSuit.setVisible(false);
-        this.time.addEvent({
-          delay: 500,
-          callback: () => {
-            smallBag1.setVisible(true);
-            smallBag2.setVisible(true);
-            buttonsToggle(true);
-          },
-          callbackScope: this,
-        });
+        clickButton();
+        if (clickCount === 1) {
+          pyjama.setVisible(false);
+          redDress.setVisible(true);
+          girlContainer.bringToTop(girlhair);
+          costume.setVisible(false);
+          overlay.setVisible(false);
+          rectangleAnim(-30, rectangleContainer);
+          rectangleAnim(30, progressBarContainer);
+          girlEmotionJoy();
+          buttonsToggle(false);
+          clothButtonContainer.add(smallBag1);
+          clothButtonContainer2.add(smallBag2);
+          smallDress.setVisible(false);
+          smallSuit.setVisible(false);
+          this.time.addEvent({
+            delay: 500,
+            callback: () => {
+              smallBag1.setVisible(true);
+              smallBag2.setVisible(true);
+              buttonsToggle(true);
+            },
+            callbackScope: this,
+          });
+        } else if (clickCount === 2) {
+          bigBag1.setVisible(true);
+          girlContainer.bringToTop(girlhair);
+          buttonsToggle(false);
+          clothButtonContainer.add(sunGlassesSmall);
+          clothButtonContainer2.add(chokerSmall);
+          smallBag1.setVisible(false);
+          smallBag2.setVisible(false);
+          this.time.addEvent({
+            delay: 500,
+            callback: () => {
+              sunGlassesSmall.setVisible(true);
+              chokerSmall.setVisible(true);
+              buttonsToggle(true);
+            },
+            callbackScope: this,
+          });
+        } else if (clickCount === 3) {
+          sunGlasses.setVisible(true);
+          buttonsToggle(false);
+          clothButtonContainer.add(makeup1Small);
+          clothButtonContainer2.add(makeup2Small);
+          sunGlassesSmall.setVisible(false);
+          chokerSmall.setVisible(false);
+          this.time.addEvent({
+            delay: 500,
+            callback: () => {
+              makeup1Small.setVisible(true);
+              makeup2Small.setVisible(true);
+              buttonsToggle(true);
+            },
+          });
+        } else if (clickCount === 4) {
+          makeup1.setVisible(true);
+          buttonsToggle(false);
+        }
       });
-    buttonOne
-      .setSize(100, 100)
-      .setInteractive()
-      .on("pointerdown", () => {
-        bigBag1.setVisible(true);
-        girlContainer.add(bigBag1);
-        girlContainer.bringToTop(girlhair);
-      });
+    // .on("pointerdown", () => {
+    //
+    // });
+
     buttonTwo
       .setSize(100, 100)
       .setInteractive()
       .on("pointerdown", () => {
-        pyjama.setVisible(false);
-        costume.setVisible(true);
-        girlContainer.add(costume);
-        girlContainer.bringToTop(girlhair);
-        redDress.setVisible(false);
-        overlay.setVisible(false);
-        rectangleAnim(-30, rectangleContainer);
-        rectangleAnim(30, progressBarContainer);
-        girlEmotionJoy();
-        buttonsToggle(false);
-        clothButtonContainer.add(smallBag1);
-        clothButtonContainer2.add(smallBag2);
-        smallSuit.setVisible(false);
-        smallDress.setVisible(false);
-        this.time.addEvent({
-          delay: 500,
-          callback: () => {
-            smallBag1.setVisible(true);
-            smallBag2.setVisible(true);
-            buttonsToggle(true);
-          },
-          callbackScope: this,
-        });
+        clickButton();
+        if (clickCount === 1) {
+          pyjama.setVisible(false);
+          costume.setVisible(true);
+          costume.setVisible(true);
+          girlContainer.bringToTop(girlhair);
+          redDress.setVisible(false);
+          overlay.setVisible(false);
+          rectangleAnim(-30, rectangleContainer);
+          rectangleAnim(30, progressBarContainer);
+          girlEmotionJoy();
+          buttonsToggle(false);
+          clothButtonContainer.add(smallBag1);
+          clothButtonContainer2.add(smallBag2);
+          smallSuit.setVisible(false);
+          smallDress.setVisible(false);
+          this.time.addEvent({
+            delay: 500,
+            callback: () => {
+              smallBag1.setVisible(true);
+              smallBag2.setVisible(true);
+              buttonsToggle(true);
+            },
+            callbackScope: this,
+          });
+        } else if (clickCount === 2) {
+          bigBag2.setVisible(true);
+          girlContainer.bringToTop(girlhair);
+          buttonsToggle(false);
+          clothButtonContainer.add(sunGlassesSmall);
+          clothButtonContainer2.add(chokerSmall);
+          smallBag1.setVisible(false);
+          smallBag2.setVisible(false);
+          this.time.addEvent({
+            delay: 500,
+            callback: () => {
+              sunGlassesSmall.setVisible(true);
+              chokerSmall.setVisible(true);
+              buttonsToggle(true);
+            },
+            callbackScope: this,
+          });
+        } else if (clickCount === 3) {
+          choker.setVisible(true);
+          buttonsToggle(false);
+          clothButtonContainer.add(makeup1Small);
+          clothButtonContainer2.add(makeup2Small);
+          sunGlassesSmall.setVisible(false);
+          chokerSmall.setVisible(false);
+          this.time.addEvent({
+            delay: 500,
+            callback: () => {
+              makeup1Small.setVisible(true);
+              makeup2Small.setVisible(true);
+              buttonsToggle(true);
+            },
+          });
+        } else if (clickCount === 4) {
+          makeup1.setVisible(true);
+          buttonsToggle(false);
+        }
       });
-    buttonTwo
-      .setSize(100, 100)
-      .setInteractive()
-      .on("pointerdown", () => {
-        bigBag2.setVisible(true);
-        girlContainer.add(bigBag2);
-        girlContainer.bringToTop(girlhair);
-      });
+    // .on("pointerdown", () => {
+    //
+    // });
 
     whiteButtonContainer.add([clothButtonContainer, clothButtonContainer2]);
 
