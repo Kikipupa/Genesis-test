@@ -33,6 +33,10 @@ export class FirstScene extends Phaser.Scene {
     this.load.image("choker", "images/clothes/choker.png");
     this.load.image("makeup1", "images/clothes/makeup1.png");
     this.load.image("makeup2", "images/clothes/makeup2.png");
+    this.load.image("bg1", "images/bg1.png");
+    this.load.image("bg2", "images/bg2.png");
+    this.load.image("beach", "images/backgrounds/beach.png");
+    this.load.image("hotel", "images/backgrounds/hotel.png");
   }
 
   create() {
@@ -49,7 +53,22 @@ export class FirstScene extends Phaser.Scene {
       .setScale(0.08)
       .setVisible(false);
     const progressbar = this.add.image(0, 0, "progressbar");
-    const orangeLine = this.add.image(0, 0, "orangeline").setOrigin(2, 0.5);
+    const orangeLine = this.add
+      .image(0, 0, "orangeline")
+      .setOrigin(2, 0.5)
+      .setVisible(false);
+    const orangeLine2 = this.add
+      .image(0, 0, "orangeline")
+      .setOrigin(1, 0.5)
+      .setVisible(false);
+    const orangeLine3 = this.add
+      .image(0, 0, "orangeline")
+      .setOrigin(0, 0.5)
+      .setVisible(false);
+    const orangeLine4 = this.add
+      .image(0, 0, "orangeline")
+      .setOrigin(-1, 0.5)
+      .setVisible(false);
     const girlContainer = this.add.container(-200, 360).setScale(0.32);
     const boyContainer = this.add.container(180, 320).setScale(0.5);
     const rectangleContainer = this.add.container(180, -200);
@@ -84,6 +103,9 @@ export class FirstScene extends Phaser.Scene {
       .sprite(170, 190, "choker")
       .setScale(0.4)
       .setVisible(false);
+
+    const bg1 = this.add.image(170, 0, "bg1").setScale(0.6).setVisible(false);
+    const bg2 = this.add.image(0, 0, "bg2").setScale(0.6).setVisible(false);
 
     this.anims.create({
       key: "girlspeak",
@@ -288,6 +310,7 @@ export class FirstScene extends Phaser.Scene {
           costume.setVisible(false);
           overlay.setVisible(false);
           rectangleAnim(-30, rectangleContainer);
+          orangeLine.setVisible(true);
           rectangleAnim(30, progressBarContainer);
           girlEmotionJoy();
           buttonsToggle(false);
@@ -305,6 +328,8 @@ export class FirstScene extends Phaser.Scene {
             callbackScope: this,
           });
         } else if (clickCount === 2) {
+          orangeLine2.setVisible(true);
+          progressBarContainer.add(orangeLine2);
           bigBag1.setVisible(true);
           girlContainer.bringToTop(girlhair);
           buttonsToggle(false);
@@ -322,6 +347,8 @@ export class FirstScene extends Phaser.Scene {
             callbackScope: this,
           });
         } else if (clickCount === 3) {
+          orangeLine3.setVisible(true);
+          progressBarContainer.add(orangeLine3);
           sunGlasses.setVisible(true);
           buttonsToggle(false);
           clothButtonContainer.add(makeup1Small);
@@ -337,8 +364,26 @@ export class FirstScene extends Phaser.Scene {
             },
           });
         } else if (clickCount === 4) {
+          orangeLine4.setVisible(true);
+          progressBarContainer.add(orangeLine4);
           makeup1.setVisible(true);
           buttonsToggle(false);
+          makeup1Small.setVisible(false);
+          makeup2Small.setVisible(false);
+          rectangleText.setText("Choose your location");
+          clothButtonContainer.add(bg2);
+          clothButtonContainer2.add(bg1);
+          this.time.addEvent({
+            delay: 500,
+            callback: () => {
+              bg1.setVisible(true);
+              bg2.setVisible(true);
+              rectangleAnim(-30, progressBarContainer);
+              rectangleAnim(30, rectangleContainer);
+              buttonsToggle(true);
+            },
+          });
+        } else if (clickCount === 5) {
         }
       });
     // .on("pointerdown", () => {
@@ -358,6 +403,7 @@ export class FirstScene extends Phaser.Scene {
           redDress.setVisible(false);
           overlay.setVisible(false);
           rectangleAnim(-30, rectangleContainer);
+          orangeLine.setVisible(true);
           rectangleAnim(30, progressBarContainer);
           girlEmotionJoy();
           buttonsToggle(false);
@@ -375,6 +421,8 @@ export class FirstScene extends Phaser.Scene {
             callbackScope: this,
           });
         } else if (clickCount === 2) {
+          orangeLine2.setVisible(true);
+          progressBarContainer.add(orangeLine2);
           bigBag2.setVisible(true);
           girlContainer.bringToTop(girlhair);
           buttonsToggle(false);
@@ -392,6 +440,8 @@ export class FirstScene extends Phaser.Scene {
             callbackScope: this,
           });
         } else if (clickCount === 3) {
+          orangeLine3.setVisible(true);
+          progressBarContainer.add(orangeLine3);
           choker.setVisible(true);
           buttonsToggle(false);
           clothButtonContainer.add(makeup1Small);
@@ -407,8 +457,25 @@ export class FirstScene extends Phaser.Scene {
             },
           });
         } else if (clickCount === 4) {
+          orangeLine4.setVisible(true);
+          progressBarContainer.add(orangeLine4);
           makeup1.setVisible(true);
           buttonsToggle(false);
+          makeup1Small.setVisible(false);
+          makeup2Small.setVisible(false);
+          rectangleText.setText("Choose your location");
+          clothButtonContainer.add(bg1);
+          clothButtonContainer2.add(bg2);
+          this.time.addEvent({
+            delay: 500,
+            callback: () => {
+              bg1.setVisible(true);
+              bg2.setVisible(true);
+              rectangleAnim(-30, progressBarContainer);
+              rectangleAnim(30, rectangleContainer);
+              buttonsToggle(true);
+            },
+          });
         }
       });
     // .on("pointerdown", () => {
