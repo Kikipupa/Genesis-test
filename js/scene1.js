@@ -37,6 +37,7 @@ export class FirstScene extends Phaser.Scene {
     this.load.image("bg2", "images/bg2.png");
     this.load.image("beach", "images/backgrounds/beach.png");
     this.load.image("hotel", "images/backgrounds/hotel.png");
+    this.load.image("finalpopup", "images/finalmassege.png");
   }
 
   create() {
@@ -71,8 +72,9 @@ export class FirstScene extends Phaser.Scene {
       .image(0, 0, "orangeline")
       .setOrigin(-1, 0.5)
       .setVisible(false);
-    const girlContainer = this.add.container(-200, 360).setScale(0.32);
     const boyContainer = this.add.container(180, 320).setScale(0.5);
+    const girlContainer = this.add.container(-200, 360).setScale(0.32);
+    const finalMessageContainer = this.add.container(150, 400);
     const rectangleContainer = this.add.container(180, -200);
     const whiteButtonContainer = this.add.container(95, 1000);
     const clothButtonContainer = this.add.container(0, 0);
@@ -181,8 +183,15 @@ export class FirstScene extends Phaser.Scene {
 
     const speak = this.add.sprite(0, 0, "neutralface").play("speak");
     const fronthair = this.add.image(0, 0, "fronthair");
+    const finalPopup = this.add.image(0, 0, "finalpopup");
     const popupman = this.add.image(0, 0, "message");
     popupman.setScale(0);
+    const finalText = this.add.text(-120, 0, "You are beautiful!", {
+      font: "36px arial",
+      color: "black",
+      boundsAlignH: "left",
+    });
+    finalMessageContainer.add([finalPopup, finalText]).setScale(0);
 
     boyContainer.add([boy, backhair, speak, fronthair, popupman]);
 
@@ -390,8 +399,20 @@ export class FirstScene extends Phaser.Scene {
           rectangleAnim(-30, rectangleContainer);
           buttonsToggle(false);
           popupman.setVisible(false);
-          finalMove(70, girlContainer);
+          finalMove(90, girlContainer);
           finalMove(230, boyContainer);
+          this.time.addEvent({
+            delay: 500,
+            callback: () => {
+              if (redDress.visible) {
+                showMessage(finalMessageContainer, 0.6);
+              } else if (!redDress.visible) {
+                finalText.setX(-200);
+                finalText.setText("What a weird appearance!");
+                showMessage(finalMessageContainer, 0.6);
+              }
+            },
+          });
         }
       });
     // .on("pointerdown", () => {
@@ -489,8 +510,19 @@ export class FirstScene extends Phaser.Scene {
           rectangleAnim(-30, rectangleContainer);
           buttonsToggle(false);
           popupman.setVisible(false);
-          finalMove(70, girlContainer);
+          finalMove(90, girlContainer);
           finalMove(230, boyContainer);
+          this.time.addEvent({
+            delay: 500,
+            callback: () => {
+              if (redDress.visible) {
+                showMessage(finalMessageContainer, 0.6);
+              } else if (!redDress.visible) {
+                finalText.setText("What a weird appearance!");
+                showMessage(finalMessageContainer, 0.6);
+              }
+            },
+          });
         }
       });
 
