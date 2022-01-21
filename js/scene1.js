@@ -415,9 +415,6 @@ export class FirstScene extends Phaser.Scene {
           });
         }
       });
-    // .on("pointerdown", () => {
-    //
-    // });
 
     buttonTwo
       .setSize(100, 100)
