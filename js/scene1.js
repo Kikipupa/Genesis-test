@@ -407,7 +407,7 @@ export class FirstScene extends Phaser.Scene {
               if (redDress.visible) {
                 showMessage(finalMessageContainer, 0.6);
               } else if (!redDress.visible) {
-                finalText.setX(-200);
+                finalText.x = -200;
                 finalText.setText("What a weird appearance!");
                 showMessage(finalMessageContainer, 0.6);
               }
@@ -518,6 +518,7 @@ export class FirstScene extends Phaser.Scene {
               if (redDress.visible) {
                 showMessage(finalMessageContainer, 0.6);
               } else if (!redDress.visible) {
+                finalText.x = -200;
                 finalText.setText("What a weird appearance!");
                 showMessage(finalMessageContainer, 0.6);
               }
