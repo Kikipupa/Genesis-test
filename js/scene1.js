@@ -41,6 +41,8 @@ export class FirstScene extends Phaser.Scene {
 
   create() {
     const bedroom = this.add.image(150, 300, "bedroom");
+    const hotel = this.add.image(150, 300, "hotel").setVisible(false);
+    const beach = this.add.image(150, 300, "beach").setVisible(false);
     const overlay = this.add.renderTexture(0, 0, 360, 600);
     overlay.fill(0x000000, 0.75);
     overlay.setVisible(true);
@@ -384,6 +386,12 @@ export class FirstScene extends Phaser.Scene {
             },
           });
         } else if (clickCount === 5) {
+          hotel.setVisible(true);
+          rectangleAnim(-30, rectangleContainer);
+          buttonsToggle(false);
+          popupman.setVisible(false);
+          finalMove(70, girlContainer);
+          finalMove(230, boyContainer);
         }
       });
     // .on("pointerdown", () => {
@@ -464,8 +472,8 @@ export class FirstScene extends Phaser.Scene {
           makeup1Small.setVisible(false);
           makeup2Small.setVisible(false);
           rectangleText.setText("Choose your location");
-          clothButtonContainer.add(bg1);
-          clothButtonContainer2.add(bg2);
+          clothButtonContainer.add(bg2);
+          clothButtonContainer2.add(bg1);
           this.time.addEvent({
             delay: 500,
             callback: () => {
@@ -476,11 +484,26 @@ export class FirstScene extends Phaser.Scene {
               buttonsToggle(true);
             },
           });
+        } else if (clickCount === 5) {
+          beach.setVisible(true);
+          rectangleAnim(-30, rectangleContainer);
+          buttonsToggle(false);
+          popupman.setVisible(false);
+          finalMove(70, girlContainer);
+          finalMove(230, boyContainer);
         }
       });
-    // .on("pointerdown", () => {
-    //
-    // });
+
+    const finalMove = (x, target) => {
+      this.tweens.add({
+        targets: target,
+        x: x,
+        ease: "Linear",
+        duration: 400,
+        repeat: 0,
+        yoyo: false,
+      });
+    };
 
     whiteButtonContainer.add([clothButtonContainer, clothButtonContainer2]);
 
